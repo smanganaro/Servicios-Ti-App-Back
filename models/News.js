@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 let News = new Schema({
+	_id: mongoose.Schema.Types.ObjectId,
 	title:{
 		type: String
 	},
@@ -17,10 +18,11 @@ let News = new Schema({
 	date:{
 		type: Date
 	},
-	/*img: { 
-		data: Buffer,
-		contentType: String
-	}*/
+	img: { 
+		type: String
+	}
+}, {
+	collection: 'news'
 });
 
 module.exports = mongoose.model('News', News)

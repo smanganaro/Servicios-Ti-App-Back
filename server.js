@@ -2,19 +2,42 @@
 var express = require("express");
 var bodyParser = require("body-parser");
 var app = express(); 
+var mongoose = require('mongoose');
+var cors = require('cors');
 
 var dashboardRouter = require('./routes/dashboard');
+var disponibilidadRouter = require('./routes/disponibilidad');
+var newsRouter = require('./routes/news');
+
+
+//CORS
+app.use(cors());
+// Body Parser Middleware
+app.use(bodyParser.json());
+
+
+mongoose.connect('mongodb://127.0.0.1:27017/serviciosTiAppDb',{
+  useUnifiedTopology: true,
+  useNewUrlParser:true});
+
+const connection = mongoose.connection;
+
+connection.once('open', function(){
+  console.log("MongoDB database connection established successfully");
+})
 
 //Setting up server
 var server = app.listen(process.env.PORT || 8080, function () {
     var port = server.address().port;
     console.log("App now running on port", port);
     });
-
-// Body Parser Middleware
-app.use(bodyParser.json()); 
-
+app.use('/public', express.static('public'));
 app.use('/api/dashboard', dashboardRouter);
+app.use('/api/disponibilidad', disponibilidadRouter);
+app.use('/api/news', newsRouter);
+
+
+module.exports = app;
 
 // catch 404 and forward to error handler
 /*app.use(function(req, res, next) {

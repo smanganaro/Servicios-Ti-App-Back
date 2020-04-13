@@ -22,11 +22,18 @@ function getNewsById(id, res){
 	});
 }
 
-function createNews(body, res){
-	let today =	Date();
-	let data = body;
-	data.date = today;
-	let news = new News(data);
+function createNews(req, res){
+	const url = req.protocol + '://' + req.get('host');
+
+	const news = new News({
+		_id: new mongoose.Types.ObjectId(),
+		title: req.body.title,
+		subtitle: req.body.subtitle,
+		body: req.body.body,
+		author: req.body.author,
+		date: Date(),
+		img: url + '/public/' + req.file.filename
+	});
 	news.save().then(news => {
 			res.status(200).json({'news': 'news added successfully'});
 		}).catch(err => {
@@ -34,6 +41,7 @@ function createNews(body, res){
 		});
 }
 
+/*deprecated*/
 function updateNews(req, res){
 	News.findById(req.params.id, function(err, news) {
         if (!news)

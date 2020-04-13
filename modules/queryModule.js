@@ -21,7 +21,8 @@ function queryModule(){
             });*/ 
             //console.log(results, "hola");           
             res.json(results);           
-            db.end();
+            
+            //db.end();
           
 
           })
